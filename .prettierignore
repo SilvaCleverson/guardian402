@@ -1,0 +1,9 @@
+node_modules
+dist
+coverage
+.git
+*.log
+package-lock.json
+GUARDIAN402_CHALLENGE.md
+contracts/**/target
+contracts/**/test_snapshots

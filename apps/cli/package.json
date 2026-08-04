@@ -1,0 +1,22 @@
+{
+  "name": "@guardian402/cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "guardian": "./dist/index.js"
+  },
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@guardian402/shared": "*",
+    "@stellar/stellar-sdk": "^16.2.0",
+    "@x402/core": "^2.20.0",
+    "@x402/fetch": "^2.20.0",
+    "@x402/stellar": "^2.20.0",
+    "dotenv": "^17.4.2"
+  }
+}

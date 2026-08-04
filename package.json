@@ -1,0 +1,40 @@
+{
+  "name": "guardian402",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Pay-per-use boleto integrity verification API protected by x402 on Stellar",
+  "license": "MIT",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build -w @guardian402/shared && npm run build -w @guardian402/contract-client && npm run build -w @guardian402/api && npm run build -w @guardian402/cli",
+    "dev:api": "npm run dev -w @guardian402/api",
+    "start:api": "npm run start -w @guardian402/api",
+    "guardian": "npm run start -w @guardian402/cli --",
+    "seed:demo": "tsx scripts/seed-demo.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^22.15.30",
+    "@types/supertest": "^6.0.3",
+    "@typescript-eslint/eslint-plugin": "^8.33.1",
+    "@typescript-eslint/parser": "^8.33.1",
+    "eslint": "^9.28.0",
+    "prettier": "^3.5.3",
+    "supertest": "^7.2.2",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.1"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
