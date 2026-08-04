@@ -91,7 +91,7 @@ async function authorizeAndSettle(
   const tx = new Transaction(txXdr, networkPassphrase);
   const sorobanData = tx.toEnvelope().v1()?.tx()?.ext()?.sorobanData();
 
-  // Configure fee to 1 stroop � prevents testnet facilitator limit issue (Stellar docs).
+  // Configure fee to 1 stroop — avoids the testnet facilitator fee-limit issue (Stellar docs).
   if (sorobanData) {
     paymentPayload = {
       ...paymentPayload,
