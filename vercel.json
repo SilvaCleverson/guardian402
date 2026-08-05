@@ -1,0 +1,5 @@
+{
+  "rewrites": [],
+  "installCommand": "npm install --workspace=@guardian402/web",
+  "buildCommand": "npm run build --workspace=@guardian402/web"
+}

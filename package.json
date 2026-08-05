@@ -10,9 +10,11 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build -w @guardian402/shared && npm run build -w @guardian402/contract-client && npm run build -w @guardian402/api && npm run build -w @guardian402/cli",
+    "build": "npm run build -w @guardian402/shared && npm run build -w @guardian402/contract-client && npm run build -w @guardian402/api && npm run build -w @guardian402/cli && npm run build -w @guardian402/web",
     "dev:api": "npm run dev -w @guardian402/api",
+    "dev:web": "npm run dev -w @guardian402/web",
     "start:api": "npm run start -w @guardian402/api",
+    "start:web": "npm run start -w @guardian402/web",
     "guardian": "npm run start -w @guardian402/cli --",
     "seed:demo": "tsx scripts/seed-demo.ts",
     "test": "vitest run",
