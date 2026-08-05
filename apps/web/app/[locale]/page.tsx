@@ -66,6 +66,12 @@ export default async function LocalePage({ params }: PageProps) {
         </div>
       </section>
 
+      <section className="section" id="totvs">
+        <h2>{t.totvsTitle}</h2>
+        <p className="lead">{t.totvsSupport}</p>
+        <p className="disclaimer">{t.totvsSource}</p>
+      </section>
+
       <section className="section" id="why">
         <h2>{t.whyTitle}</h2>
         <p className="lead">{t.whySupport}</p>

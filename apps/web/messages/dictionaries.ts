@@ -14,6 +14,9 @@ export type Dictionary = {
   whyTitle: string;
   whySupport: string;
   whyPoints: [string, string, string];
+  totvsTitle: string;
+  totvsSupport: string;
+  totvsSource: string;
   flowTitle: string;
   flowSupport: string;
   flowSteps: [string, string, string, string];
@@ -52,6 +55,10 @@ const en: Dictionary = {
     "MVP: hash-based verification against a Soroban registry, protected by x402 exact payments in USDC on Stellar Testnet.",
     "Roadmap: native Protheus consumption of the same endpoint - agents and ERPs pay only for the checks they run.",
   ],
+  totvsTitle: "What is TOTVS?",
+  totvsSupport:
+    "TOTVS is Brazil's largest business-software company. Its flagship ERP, Protheus, is widely used by Brazilian firms to issue and manage boletos (bank payment slips). In the latest FGV-Eaesp IT survey, TOTVS holds about 34% of Brazil's overall ERP market (tied with SAP) and about 50% among smaller deployments (up to ~180 users) - so verifying a Protheus boleto reaches a large share of Brazilian companies.",
+  totvsSource: "Source: FGV-Eaesp Annual IT Use Survey (Brazil ERP market share).",
   flowTitle: "How payment meets proof",
   flowSupport: "One Protheus-aligned verification is one measurable USDC payment.",
   flowSteps: [
@@ -101,6 +108,10 @@ const pt: Dictionary = {
     "MVP: verificacao por hash contra um registry Soroban, protegida por pagamentos x402 exact em USDC na Stellar Testnet.",
     "Roadmap: consumo nativo no Protheus do mesmo endpoint - agentes e ERPs pagam so pelas verificacoes que executam.",
   ],
+  totvsTitle: "O que e a TOTVS?",
+  totvsSupport:
+    "A TOTVS e a maior empresa brasileira de software de gestao. Seu ERP principal, o Protheus, e amplamente usado por empresas no Brasil para emitir e gerir boletos. Na pesquisa FGV-Eaesp mais recente, a TOTVS tem cerca de 34% do mercado geral de ERP no Brasil (empatada com a SAP) e cerca de 50% nas instalacoes menores (ate ~180 usuarios) - verificar um boleto no Protheus alcanca uma fatia grande do mercado corporativo brasileiro.",
+  totvsSource: "Fonte: Pesquisa Anual de Uso de TI da FGV-Eaesp (market share de ERP no Brasil).",
   flowTitle: "Onde pagamento encontra prova",
   flowSupport: "Cada verificacao alinhada ao Protheus e um pagamento mensuravel em USDC.",
   flowSteps: [
@@ -150,6 +161,10 @@ const es: Dictionary = {
     "MVP: verificacion por hash contra un registry Soroban, protegida por pagos x402 exact en USDC en Stellar Testnet.",
     "Roadmap: consumo nativo en Protheus del mismo endpoint - agentes y ERPs pagan solo por las verificaciones que ejecutan.",
   ],
+  totvsTitle: "Que es TOTVS?",
+  totvsSupport:
+    "TOTVS es la mayor empresa brasilena de software de gestion. Su ERP principal, Protheus, se usa ampliamente en Brasil para emitir y administrar boletos. En la encuesta FGV-Eaesp mas reciente, TOTVS tiene cerca del 34% del mercado general de ERP en Brasil (empatada con SAP) y cerca del 50% en instalaciones mas pequenas (hasta ~180 usuarios) - verificar un boleto en Protheus alcanza una gran parte del mercado corporativo brasileno.",
+  totvsSource: "Fuente: Encuesta Anual de Uso de TI de FGV-Eaesp (market share de ERP en Brasil).",
   flowTitle: "Donde el pago encuentra la prueba",
   flowSupport: "Cada verificacion alineada a Protheus es un pago medible en USDC.",
   flowSteps: [
