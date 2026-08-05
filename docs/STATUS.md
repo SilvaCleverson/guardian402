@@ -42,9 +42,9 @@ Projeto iniciado durante o Stellar Builder Summit SP 2026. Encerramento: 2026-08
 
 ### Fase 7 — Submissão
 
-- [ ] Vídeo da demo
-- [ ] Repositório público no GitHub
-- [ ] Conferir ausência de segredos no remoto
+- [ ] Vídeo da demo (opcional no edital — não bloqueia a submissão)
+- [x] Repositório público no GitHub (https://github.com/SilvaCleverson/guardian402)
+- [x] Conferir ausência de segredos no remoto
 
 ## Evidências locais
 
