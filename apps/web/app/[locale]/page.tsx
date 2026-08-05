@@ -8,6 +8,7 @@ const CONTRACT_ID = "CARQCD7G3S7WNWA37NZS2DW4CCP2V3J4U4T4NG3FXVEW4XNALM65NHAO";
 const GITHUB_URL = "https://github.com/SilvaCleverson/guardian402";
 const CONTRACT_URL = `https://lab.stellar.org/r/testnet/contract/${CONTRACT_ID}`;
 const SUMMIT_URL = "https://stellar-summit-lp.vercel.app/";
+const WHITEPAPER_URL = "https://guardian-labs.xyz/boleto-guardian.html";
 
 type PageProps = {
   params: Promise<{ locale: string }>;
@@ -52,9 +53,6 @@ export default async function LocalePage({ params }: PageProps) {
         <h1 className="brand">{t.brand}</h1>
         <p className="tagline">{t.tagline}</p>
         <p className="support">{t.heroSupport}</p>
-        <p className="support" style={{ marginTop: "0.75rem", fontSize: "0.92rem" }}>
-          {t.laneNote}
-        </p>
         <div className="cta-row">
           <a className="btn btn-primary" href={GITHUB_URL} target="_blank" rel="noreferrer">
             {t.ctaGithub}
@@ -62,10 +60,23 @@ export default async function LocalePage({ params }: PageProps) {
           <a className="btn btn-ghost" href={CONTRACT_URL} target="_blank" rel="noreferrer">
             {t.ctaContract}
           </a>
-          <a className="btn btn-ghost" href={SUMMIT_URL} target="_blank" rel="noreferrer">
-            {t.ctaSummit} ?
+          <a className="btn btn-ghost" href={WHITEPAPER_URL} target="_blank" rel="noreferrer">
+            {t.ctaWhitepaper}
           </a>
         </div>
+      </section>
+
+      <section className="section" id="why">
+        <h2>{t.whyTitle}</h2>
+        <p className="lead">{t.whySupport}</p>
+        <ol className="flow-list">
+          {t.whyPoints.map((point) => (
+            <li key={point}>{point}</li>
+          ))}
+        </ol>
+        <p className="lead" style={{ marginTop: "1.5rem" }}>
+          {t.laneNote}
+        </p>
       </section>
 
       <section className="section" id="flow">
@@ -105,6 +116,7 @@ export default async function LocalePage({ params }: PageProps) {
             marginTop: "2.5rem",
             fontFamily: "var(--font-display)",
             fontSize: "1.35rem",
+            textTransform: "uppercase",
           }}
         >
           {t.statusesTitle}
@@ -125,7 +137,11 @@ export default async function LocalePage({ params }: PageProps) {
         <p>{t.footerBuilt}</p>
         <p>
           <a href={SUMMIT_URL} target="_blank" rel="noreferrer">
-            {t.summitOfficial} ?
+            {t.summitOfficial}
+          </a>
+          {" | "}
+          <a href={WHITEPAPER_URL} target="_blank" rel="noreferrer">
+            {t.ctaWhitepaper}
           </a>
         </p>
       </footer>
