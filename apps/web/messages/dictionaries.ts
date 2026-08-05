@@ -9,7 +9,7 @@ export type Dictionary = {
   heroSupport: string;
   ctaGithub: string;
   ctaContract: string;
-  ctaWhitepaper: string;
+  ctaReference: string;
   summitNote: string;
   whyTitle: string;
   whySupport: string;
@@ -37,19 +37,19 @@ export type Dictionary = {
 const en: Dictionary = {
   metaTitle: "Guardian402 - Pay-per-use boleto verification for ERP agents",
   metaDescription:
-    "Guardian402 connects the Boleto Guardian vision to agentic payments: verify whether the boleto in TOTVS Protheus matches a Soroban integrity proof, paying per call with x402 USDC.",
+    "Guardian402 verifies boleto integrity against a Soroban proof, with pay-per-call x402 USDC on Stellar Testnet. Built for agents and ERP flows such as TOTVS Protheus.",
   langName: "English",
   brand: "Guardian402",
   tagline: "Is the boleto in Protheus the real one?",
   heroSupport:
-    "Guardian402 is the agentic payment layer of Boleto Guardian (Guardian Labs). An ERP, CLI, or AI agent pays 0.01 USDC via x402 and checks if the boleto positioned in TOTVS Protheus matches a Soroban integrity proof - no API key, no subscription.",
+    "Pay-per-use API that checks whether boleto data - the kind positioned in TOTVS Protheus or sent by an agent - matches a Soroban integrity proof. An ERP, CLI, or AI agent pays 0.01 USDC via x402 per call. No API key, no subscription.",
   ctaGithub: "Open repository",
   ctaContract: "View contract",
-  ctaWhitepaper: "Boleto Guardian",
+  ctaReference: "Boleto Guardian",
   summitNote: "Stellar Builder Summit SP 2026 / Agentic Payments (x402)",
   whyTitle: "From ERP boleto to on-chain proof",
   whySupport:
-    "Boleto Guardian started as public authenticity for Brazilian boletos. The whitepaper still describes Manage Data; Guardian402 moves the registry to Soroban and makes each verification a paid agent call.",
+    "Companies and agents need an independent integrity check before trusting a boleto. Guardian402 turns that check into a measurable Stellar payment.",
   whyPoints: [
     "Context: a boleto sitting in TOTVS Protheus (or another ERP) needs an independent integrity check before trust or payment.",
     "MVP: hash-based verification against a Soroban registry, protected by x402 exact payments in USDC on Stellar Testnet.",
@@ -81,7 +81,7 @@ const en: Dictionary = {
   ],
   disclaimer:
     "Guardian402 verifies whether supplied boleto data matches a previously registered integrity proof. It does not confirm bank settlement or payment status.",
-  footerBuilt: "Guardian Labs / Boleto Guardian / Built on Stellar / x402 / Soroban",
+  footerBuilt: "Built on Stellar / x402 / Soroban",
   summitOfficial: "Official Summit site",
   ctaSummit: "Summit site",
   laneNote: "Lane: Payments and Agent Tooling / SDF DevEx / Agentic Payments (x402)",
@@ -90,19 +90,19 @@ const en: Dictionary = {
 const pt: Dictionary = {
   metaTitle: "Guardian402 - Verificacao de boleto paga por uso para agentes e ERP",
   metaDescription:
-    "Guardian402 conecta a visao do Boleto Guardian a pagamentos agenticos: verifica se o boleto no TOTVS Protheus corresponde a uma prova Soroban, pagando por chamada com x402 USDC.",
+    "Guardian402 verifica a integridade de boletos contra uma prova Soroban, com pagamento por chamada em x402 USDC na Stellar Testnet. Feito para agentes e fluxos de ERP como o TOTVS Protheus.",
   langName: "Portugues",
   brand: "Guardian402",
   tagline: "O boleto no Protheus e o boleto verdadeiro?",
   heroSupport:
-    "Guardian402 e a camada de pagamento agentico do Boleto Guardian (Guardian Labs). Um ERP, CLI ou agente de IA paga 0,01 USDC via x402 e confere se o boleto posicionado no TOTVS Protheus corresponde a uma prova de integridade no Soroban - sem API key, sem assinatura.",
+    "API paga por uso que confere se os dados de um boleto - como o posicionado no TOTVS Protheus ou enviado por um agente - correspondem a uma prova de integridade no Soroban. Um ERP, CLI ou agente de IA paga 0,01 USDC via x402 por chamada. Sem API key, sem assinatura.",
   ctaGithub: "Abrir repositorio",
   ctaContract: "Ver contrato",
-  ctaWhitepaper: "Boleto Guardian",
+  ctaReference: "Boleto Guardian",
   summitNote: "Stellar Builder Summit SP 2026 / Agentic Payments (x402)",
   whyTitle: "Do boleto no ERP a prova on-chain",
   whySupport:
-    "O Boleto Guardian nasceu como autenticidade publica para boletos brasileiros. O whitepaper ainda cita Manage Data; o Guardian402 move o registro para Soroban e transforma cada verificacao em uma chamada paga.",
+    "Empresas e agentes precisam de uma checagem independente de integridade antes de confiar em um boleto. O Guardian402 transforma essa checagem em um pagamento mensuravel na Stellar.",
   whyPoints: [
     "Contexto: o boleto posicionado no TOTVS Protheus (ou outro ERP) precisa de uma checagem independente de integridade antes de confiar ou pagar.",
     "MVP: verificacao por hash contra um registry Soroban, protegida por pagamentos x402 exact em USDC na Stellar Testnet.",
@@ -134,7 +134,7 @@ const pt: Dictionary = {
   ],
   disclaimer:
     "O Guardian402 verifica se os dados fornecidos correspondem a uma prova de integridade registrada. Ele nao confirma liquidacao bancaria nem status de pagamento do boleto.",
-  footerBuilt: "Guardian Labs / Boleto Guardian / Built on Stellar / x402 / Soroban",
+  footerBuilt: "Built on Stellar / x402 / Soroban",
   summitOfficial: "Site oficial do Summit",
   ctaSummit: "Site do Summit",
   laneNote: "Lane: Payments and Agent Tooling / SDF DevEx / Agentic Payments (x402)",
@@ -143,19 +143,19 @@ const pt: Dictionary = {
 const es: Dictionary = {
   metaTitle: "Guardian402 - Verificacion de boleto de pago por uso para agentes y ERP",
   metaDescription:
-    "Guardian402 conecta la vision de Boleto Guardian a pagos agenticos: verifica si el boleto en TOTVS Protheus coincide con una prueba Soroban, pagando por llamada con x402 USDC.",
+    "Guardian402 verifica la integridad de boletos contra una prueba Soroban, con pago por llamada en x402 USDC en Stellar Testnet. Hecho para agentes y flujos de ERP como TOTVS Protheus.",
   langName: "Espanol",
   brand: "Guardian402",
   tagline: "El boleto en Protheus es el verdadero?",
   heroSupport:
-    "Guardian402 es la capa de pago agentico de Boleto Guardian (Guardian Labs). Un ERP, CLI o agente de IA paga 0,01 USDC via x402 y comprueba si el boleto posicionado en TOTVS Protheus coincide con una prueba de integridad en Soroban - sin API key, sin suscripcion.",
+    "API de pago por uso que comprueba si los datos de un boleto - como el posicionado en TOTVS Protheus o enviado por un agente - coinciden con una prueba de integridad en Soroban. Un ERP, CLI o agente de IA paga 0,01 USDC via x402 por llamada. Sin API key, sin suscripcion.",
   ctaGithub: "Abrir repositorio",
   ctaContract: "Ver contrato",
-  ctaWhitepaper: "Boleto Guardian",
+  ctaReference: "Boleto Guardian",
   summitNote: "Stellar Builder Summit SP 2026 / Agentic Payments (x402)",
   whyTitle: "Del boleto en el ERP a la prueba on-chain",
   whySupport:
-    "Boleto Guardian nacio como autenticidad publica para boletos brasilenos. El whitepaper aun menciona Manage Data; Guardian402 mueve el registro a Soroban y convierte cada verificacion en una llamada de pago.",
+    "Empresas y agentes necesitan una comprobacion independiente de integridad antes de confiar en un boleto. Guardian402 convierte esa comprobacion en un pago medible en Stellar.",
   whyPoints: [
     "Contexto: el boleto posicionado en TOTVS Protheus (u otro ERP) necesita una comprobacion independiente de integridad antes de confiar o pagar.",
     "MVP: verificacion por hash contra un registry Soroban, protegida por pagos x402 exact en USDC en Stellar Testnet.",
@@ -187,7 +187,7 @@ const es: Dictionary = {
   ],
   disclaimer:
     "Guardian402 verifica si los datos suministrados coinciden con una prueba de integridad registrada. No confirma liquidacion bancaria ni el estado de pago del boleto.",
-  footerBuilt: "Guardian Labs / Boleto Guardian / Built on Stellar / x402 / Soroban",
+  footerBuilt: "Built on Stellar / x402 / Soroban",
   summitOfficial: "Sitio oficial del Summit",
   ctaSummit: "Sitio del Summit",
   laneNote: "Lane: Payments and Agent Tooling / SDF DevEx / Agentic Payments (x402)",

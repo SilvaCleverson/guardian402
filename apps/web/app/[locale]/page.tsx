@@ -8,7 +8,7 @@ const CONTRACT_ID = "CARQCD7G3S7WNWA37NZS2DW4CCP2V3J4U4T4NG3FXVEW4XNALM65NHAO";
 const GITHUB_URL = "https://github.com/SilvaCleverson/guardian402";
 const CONTRACT_URL = `https://lab.stellar.org/r/testnet/contract/${CONTRACT_ID}`;
 const SUMMIT_URL = "https://stellar-summit-lp.vercel.app/";
-const WHITEPAPER_URL = "https://guardian-labs.xyz/boleto-guardian.html";
+const REFERENCE_URL = "https://guardian-labs.xyz/boleto-guardian.html";
 
 type PageProps = {
   params: Promise<{ locale: string }>;
@@ -59,9 +59,6 @@ export default async function LocalePage({ params }: PageProps) {
           </a>
           <a className="btn btn-ghost" href={CONTRACT_URL} target="_blank" rel="noreferrer">
             {t.ctaContract}
-          </a>
-          <a className="btn btn-ghost" href={WHITEPAPER_URL} target="_blank" rel="noreferrer">
-            {t.ctaWhitepaper}
           </a>
         </div>
       </section>
@@ -146,8 +143,8 @@ export default async function LocalePage({ params }: PageProps) {
             {t.summitOfficial}
           </a>
           {" | "}
-          <a href={WHITEPAPER_URL} target="_blank" rel="noreferrer">
-            {t.ctaWhitepaper}
+          <a href={REFERENCE_URL} target="_blank" rel="noreferrer">
+            {t.ctaReference}
           </a>
         </p>
       </footer>

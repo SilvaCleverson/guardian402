@@ -5,223 +5,85 @@
 ![Network](https://img.shields.io/badge/network-Stellar%20Testnet-7D00FF.svg)
 ![Protocol](https://img.shields.io/badge/protocol-x402-000000.svg)
 
-> Pague por verificação. Confie em cada boleto.
+> O boleto no Protheus é o boleto verdadeiro?
 
-[🇬🇧 English](README.md) · [🇪🇸 Español](README.es.md)
+[English](README.md) · [Español](README.es.md)
 
-O **Guardian402** é uma API paga por uso que verifica a integridade de um boleto. Cada chamada é cobrada em **USDC** na **Stellar Testnet** via protocolo **x402**, e a prova de integridade é lida de um contrato **Soroban**. Sem conta, sem API key, sem assinatura mensal — um agente paga apenas pela verificação que consome.
+O **Guardian402** é uma API paga por uso que verifica se os dados de um boleto — como o posicionado no **TOTVS Protheus** ou enviado por um agente — correspondem a uma prova de integridade em **Soroban**. Cada chamada é cobrada em **USDC** na **Stellar Testnet** via **x402**. Sem conta, sem API key, sem assinatura.
 
-Construído durante o **Stellar Builder Summit SP 2026** (lane Payments and Agent Tooling / Agentic Payments). Todo o código deste repositório é trabalho original produzido para o desafio.
+**Site de apresentação:** https://guardian402-summit.vercel.app  
+**Summit:** [Stellar Summit SP 2026](https://stellar-summit-lp.vercel.app/) — Payments and Agent Tooling / SDF DevEx / Agentic Payments (x402)
 
-## Sumário
+Todo o código deste repositório é trabalho original do desafio. Referência relacionada: [Boleto Guardian](https://guardian-labs.xyz/boleto-guardian.html).
 
-- [Por que o Guardian402](#por-que-o-guardian402)
-- [Como funciona](#como-funciona)
-- [Deploy atual (Testnet)](#deploy-atual-testnet)
-- [Stack tecnológica](#stack-tecnológica)
-- [Estrutura do projeto](#estrutura-do-projeto)
-- [Como começar](#como-começar)
-- [Uso do CLI](#uso-do-cli)
-- [Referência da API](#referência-da-api)
-- [Status de verificação](#status-de-verificação)
-- [Scripts](#scripts)
-- [Documentação](#documentação)
-- [Segurança e aviso legal](#segurança-e-aviso-legal)
-- [Licença](#licença)
+## O que é a TOTVS?
+
+A **TOTVS** é a maior empresa brasileira de software de gestão. Seu ERP principal, o **Protheus**, é amplamente usado para emitir e gerir boletos.
+
+Segundo a pesquisa **FGV-Eaesp** de Uso de TI:
+
+- cerca de **34%** do mercado geral de ERP no Brasil (empatada com a SAP)
+- cerca de **50%** nas instalações menores (até ~180 usuários)
+
+Verificar um boleto no Protheus alcança uma fatia grande do mercado corporativo brasileiro.
 
 ## Por que o Guardian402
 
-Empresas e agentes de IA que precisam confirmar dados de um boleto hoje dependem de integrações fechadas, contratos comerciais, API keys e cobrança mensal — um modelo pouco adequado para agentes autônomos que querem pagar por chamada.
+Empresas e agentes de IA que precisam confirmar dados de boleto hoje dependem de integrações fechadas, contratos, API keys e cobrança mensal — pouco adequado para agentes que querem pagar por chamada.
 
-O Guardian402 expõe um único endpoint protegido pelo **x402**. Não há cadastro nem API key: a própria resposta HTTP informa ao cliente quanto custa a verificação, em qual rede pagar, em qual ativo e para qual endereço. O agente assina o pagamento, repete a chamada e recebe o resultado.
+O Guardian402 expõe um endpoint protegido por **x402**. A própria resposta HTTP informa preço, rede, ativo e destinatário. O agente assina o pagamento, repete a chamada e recebe o resultado.
+
+**Caminho do produto**
+
+1. Contexto: boleto no Protheus precisa de checagem independente.
+2. MVP (este repo): verificação por hash no Soroban, paga com x402 USDC.
+3. Roadmap: consumo nativo no Protheus do mesmo endpoint.
 
 ## Como funciona
 
-```mermaid
-sequenceDiagram
-    participant Agente as CLI / Agente
-    participant API as API Guardian402
-    participant Facilitador as Facilitador x402
-    participant Stellar as Stellar Testnet (USDC)
-    participant Soroban as Contrato Soroban
-
-    Agente->>API: POST /v1/verify (sem pagamento)
-    API-->>Agente: 402 Payment Required
-    Agente->>Facilitador: Autorização de pagamento x402 assinada
-    Facilitador->>Stellar: Liquidação do pagamento (USDC)
-    Stellar-->>Facilitador: Liquidação confirmada
-    Agente->>API: POST /v1/verify (PAYMENT-SIGNATURE)
-    API->>Soroban: verify(recordKey, documentHash)
-    Soroban-->>API: AUTHENTIC | MISMATCH | NOT_FOUND | REVOKED
-    API-->>Agente: 200 OK + resultado da verificação
-```
-
-1. `POST /v1/verify` sem pagamento → `HTTP 402 Payment Required`.
-2. O cliente assina uma autorização de pagamento x402 em USDC.
-3. O facilitador liquida o pagamento na Stellar Testnet.
-4. A API consulta o contrato Soroban `verification-registry`.
-5. A API retorna `AUTHENTIC | MISMATCH | NOT_FOUND | REVOKED`.
+1. `POST /v1/verify` sem pagamento -> `HTTP 402`.
+2. Cliente autoriza pagamento x402 em USDC.
+3. Facilitator liquida na Stellar Testnet.
+4. API consulta o contrato Soroban.
+5. Retorno: `AUTHENTIC | MISMATCH | NOT_FOUND | REVOKED`.
 
 ## Deploy atual (Testnet)
 
-| Item        | Valor                                                                                                 |
-| ----------- | ------------------------------------------------------------------------------------------------------ |
-| Contract ID | `CARQCD7G3S7WNWA37NZS2DW4CCP2V3J4U4T4NG3FXVEW4XNALM65NHAO`                                            |
-| Explorer    | [lab.stellar.org](https://lab.stellar.org/r/testnet/contract/CARQCD7G3S7WNWA37NZS2DW4CCP2V3J4U4T4NG3FXVEW4XNALM65NHAO) |
-| Rede        | `stellar:testnet`                                                                                     |
-| Preço       | `$0.01` USDC por verificação                                                                          |
-| Facilitador | [www.x402.org/facilitator](https://www.x402.org/facilitator)                                          |
-
-## Stack tecnológica
-
-| Camada             | Tecnologia                             |
-| -------------------- | ---------------------------------------- |
-| Linguagem            | TypeScript                               |
-| Runtime              | Node.js ≥ 20                            |
-| Framework da API     | Express                                  |
-| Validação            | Zod                                      |
-| Contrato inteligente | Soroban (Rust)                           |
-| Blockchain           | Stellar Testnet                          |
-| Protocolo de pagamento | x402 — scheme `exact`                  |
-| Ativo                | USDC (Testnet)                           |
-| Testes               | Vitest                                   |
-| Monorepo             | npm workspaces                           |
-
-## Estrutura do projeto
-
-```text
-guardian402/
-├── apps/
-│   ├── api/                     API Express protegida pelo middleware x402
-│   └── cli/                     Cliente/agente de linha de comando que paga e verifica
-├── packages/
-│   ├── shared/                  Canonicalização e hashes compartilhados entre API, CLI e seeds
-│   └── contract-client/         Adaptador RPC para o Soroban
-├── contracts/
-│   └── verification-registry/   Contrato Soroban (Rust)
-├── scripts/                     Scripts auxiliares de carteira, deploy e demo
-├── docs/                        Arquitetura, demo, segurança, status e notas de submissão
-└── GUARDIAN402_CHALLENGE.md     Briefing original do desafio
-```
+| Item | Valor |
+| --- | --- |
+| Site | [guardian402-summit.vercel.app](https://guardian402-summit.vercel.app) |
+| Contract ID | `CARQCD7G3S7WNWA37NZS2DW4CCP2V3J4U4T4NG3FXVEW4XNALM65NHAO` |
+| Explorer | [lab.stellar.org](https://lab.stellar.org/r/testnet/contract/CARQCD7G3S7WNWA37NZS2DW4CCP2V3J4U4T4NG3FXVEW4XNALM65NHAO) |
+| Rede | `stellar:testnet` |
+| Preço | `$0.01` USDC |
+| Facilitator | [www.x402.org/facilitator](https://www.x402.org/facilitator) |
 
 ## Como começar
-
-### Pré-requisitos
-
-- Node.js ≥ 20
-- [Stellar CLI](https://developers.stellar.org/docs/tools/developer-tools) (para operações de carteira/contrato)
-- Uma carteira Testnet com saldo (XLM + trustline USDC) para o cliente de demonstração
-
-### Instalação
 
 ```bash
 npm install
 cp .env.example .env
-# preencha X402_PAY_TO, STELLAR_PRIVATE_KEY, VERIFICATION_CONTRACT_ID
 npm run build
 npm run start:api
 ```
 
-### Principais variáveis de ambiente
+No PowerShell, rode o CLI em **uma linha**:
 
-| Variável                    | Descrição                                                    |
-| ---------------------------- | ---------------------------------------------------------------- |
-| `STELLAR_NETWORK`            | Alias da rede, ex.: `stellar:testnet`                            |
-| `STELLAR_RPC_URL`             | Endpoint RPC do Soroban                                          |
-| `VERIFICATION_CONTRACT_ID`    | Contract ID do `verification-registry` implantado                |
-| `X402_PRICE`                  | Preço cobrado por verificação (ex.: `$0.01`)                      |
-| `X402_PAY_TO`                 | Endereço da carteira que recebe o pagamento                      |
-| `X402_FACILITATOR_URL`        | Endpoint do facilitador x402                                      |
-| `STELLAR_PRIVATE_KEY`         | Chave de assinatura do cliente de demo — local, **nunca commitar** |
-
-Veja [`.env.example`](.env.example) para a lista completa.
-
-## Uso do CLI
-
-```bash
-npm run guardian -- verify \
-  --boleto-id "23793381286000000000123456789012345678901234" \
-  --amount "159.90" \
-  --due-date "2026-08-10" \
-  --beneficiary-document "12345678000199"
+```powershell
+npm run guardian -- verify --boleto-id "23793381286000000000123456789012345678901234" --amount "159.90" --due-date "2026-08-10" --beneficiary-document "12345678000199"
 ```
-
-```text
-Guardian402
-
-Target: http://localhost:3001/v1/verify
-Network: stellar:testnet
-Price: 0.01 USDC
-
-[1/4] Requesting verification...
-[2/4] HTTP 402 received.
-[3/4] Authorizing and settling x402 payment...
-[4/4] Reading verification result...
-
-Result: AUTHENTIC
-Payment transaction: 3f2c...
-Contract: CARQCD7G3S7WNWA37NZS2DW4CCP2V3J4U4T4NG3FXVEW4XNALM65NHAO
-```
-
-## Referência da API
-
-| Método | Rota          | Exige pagamento | Descrição                                       |
-| ------ | ------------- | ----------------- | -------------------------------------------------- |
-| `GET`  | `/health`      | Não                | Verificação de disponibilidade                      |
-| `GET`  | `/v1/info`     | Não                | Metadados do serviço (preço, rede, contract ID)    |
-| `POST` | `/v1/verify`   | Sim (x402)         | Verifica a integridade do boleto no registro       |
-
-Corpo do `POST /v1/verify`:
-
-```json
-{
-  "boletoId": "23793381286000000000123456789012345678901234",
-  "amount": "159.90",
-  "dueDate": "2026-08-10",
-  "beneficiaryDocument": "12345678000199"
-}
-```
-
-## Status de verificação
-
-| Status      | Significado                                                       |
-| ------------ | --------------------------------------------------------------------- |
-| `AUTHENTIC`  | O registro existe, está ativo e o hash enviado corresponde.          |
-| `MISMATCH`   | O registro existe, mas os dados enviados geraram um hash diferente.  |
-| `NOT_FOUND`  | Não existe registro para o identificador informado.                  |
-| `REVOKED`    | O registro existe, mas foi revogado pelo administrador do contrato.  |
-
-## Scripts
-
-| Comando              | Descrição                            |
-| --------------------- | --------------------------------------- |
-| `npm run build`       | Compila todos os workspaces             |
-| `npm run dev:api`      | Executa a API em modo watch             |
-| `npm run start:api`    | Executa a API compilada                 |
-| `npm run guardian --`  | Executa o cliente CLI                  |
-| `npm run seed:demo`    | Popula registros de demonstração no contrato |
-| `npm test`             | Executa a suíte de testes              |
-| `npm run lint`         | Executa o ESLint                        |
-| `npm run format`       | Formata com o Prettier                  |
 
 ## Documentação
 
-- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — componentes e decisões de design
-- [`docs/DEMO.md`](docs/DEMO.md) — roteiro passo a passo da demonstração
-- [`docs/SECURITY.md`](docs/SECURITY.md) — princípios de segurança e premissas de confiança
-- [`docs/STATUS.md`](docs/STATUS.md) — checklist de progresso por fase
-- [`docs/SUBMISSION.md`](docs/SUBMISSION.md) — notas de submissão do hackathon
-- [`GUARDIAN402_CHALLENGE.md`](GUARDIAN402_CHALLENGE.md) — briefing original do desafio
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+- [`docs/DEMO.md`](docs/DEMO.md)
+- [`docs/SECURITY.md`](docs/SECURITY.md)
+- [`docs/STATUS.md`](docs/STATUS.md)
+- [Boleto Guardian](https://guardian-labs.xyz/boleto-guardian.html) (referência relacionada)
 
-## Segurança e aviso legal
+## Aviso
 
-- Somente hashes são armazenados on-chain — nunca o boleto completo, CPF/CNPJ ou dados bancários.
-- `.env` e chaves privadas nunca são commitados; use uma carteira exclusiva de Testnet para a demo.
-- A liquidação do pagamento é independente da prova de integridade: **pagar não torna um boleto autêntico**.
-
-> O Guardian402 verifica se os dados de um boleto correspondem a uma prova de integridade previamente registrada. Ele não confirma liquidação bancária ou status de pagamento.
-
-Veja [`docs/SECURITY.md`](docs/SECURITY.md) para mais detalhes.
+O Guardian402 verifica correspondência com uma prova de integridade registrada. **Não** confirma liquidação bancária nem pagamento do boleto.
 
 ## Licença
 
