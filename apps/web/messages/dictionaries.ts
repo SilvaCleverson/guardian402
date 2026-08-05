@@ -22,6 +22,9 @@ export type Dictionary = {
   statuses: { code: string; label: string }[];
   disclaimer: string;
   footerBuilt: string;
+  summitOfficial: string;
+  ctaSummit: string;
+  laneNote: string;
 };
 
 const en: Dictionary = {
@@ -59,6 +62,9 @@ const en: Dictionary = {
   disclaimer:
     "Guardian402 verifies whether supplied boleto data matches a previously registered integrity proof. It does not confirm bank settlement or payment status.",
   footerBuilt: "Built on Stellar / x402 exact / Soroban registry",
+  summitOfficial: "Official Summit site",
+  ctaSummit: "Summit site",
+  laneNote: "Lane: Payments and Agent Tooling / SDF DevEx / Agentic Payments (x402)",
 };
 
 const pt: Dictionary = {
@@ -96,6 +102,9 @@ const pt: Dictionary = {
   disclaimer:
     "O Guardian402 verifica se os dados fornecidos correspondem a uma prova de integridade registrada. Ele nao confirma liquidacao bancaria nem status de pagamento do boleto.",
   footerBuilt: "Built on Stellar / x402 exact / registro Soroban",
+  summitOfficial: "Site oficial do Summit",
+  ctaSummit: "Site do Summit",
+  laneNote: "Lane: Payments and Agent Tooling / SDF DevEx / Agentic Payments (x402)",
 };
 
 const es: Dictionary = {
@@ -133,6 +142,9 @@ const es: Dictionary = {
   disclaimer:
     "Guardian402 verifica si los datos suministrados coinciden con una prueba de integridad registrada. No confirma liquidacion bancaria ni el estado de pago del boleto.",
   footerBuilt: "Built on Stellar / x402 exact / registro Soroban",
+  summitOfficial: "Sitio oficial del Summit",
+  ctaSummit: "Sitio del Summit",
+  laneNote: "Lane: Payments and Agent Tooling / SDF DevEx / Agentic Payments (x402)",
 };
 
 export const dictionaries: Record<Locale, Dictionary> = { en, pt, es };

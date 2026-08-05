@@ -1,13 +1,12 @@
 :root {
-  --bg: #061018;
-  --bg-2: #0c1a24;
-  --fg: #f3f6f4;
-  --muted: #9aadb8;
-  --accent: #2fd6a8;
-  --accent-2: #f0c35a;
-  --line: rgba(243, 246, 244, 0.14);
-  --font-display: "Bricolage Grotesque", "Segoe UI", sans-serif;
-  --font-body: "Sora", "Segoe UI", sans-serif;
+  --bg: #191919;
+  --bg-2: #121212;
+  --fg: #ffffff;
+  --muted: #a8a8a8;
+  --accent: #d6ff3c;
+  --line: rgba(255, 255, 255, 0.12);
+  --font-display: "Space Grotesk", "Segoe UI", sans-serif;
+  --font-body: "Space Grotesk", "Segoe UI", sans-serif;
   --font-mono: "IBM Plex Mono", "Consolas", monospace;
 }
 
@@ -24,10 +23,14 @@ body {
   min-height: 100vh;
   color: var(--fg);
   font-family: var(--font-body);
-  background:
-    radial-gradient(1200px 700px at 12% -10%, rgba(47, 214, 168, 0.18), transparent 55%),
-    radial-gradient(900px 600px at 100% 0%, rgba(240, 195, 90, 0.12), transparent 50%),
-    linear-gradient(165deg, var(--bg) 0%, var(--bg-2) 48%, #07141d 100%);
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 70% -10%, rgba(214, 255, 60, 0.08), transparent 55%),
+    repeating-linear-gradient(
+      -45deg,
+      transparent 0 22px,
+      rgba(255, 255, 255, 0.025) 22px 23px
+    );
   background-attachment: fixed;
 }
 
@@ -41,11 +44,30 @@ a {
   margin: 0 auto;
 }
 
-.lang-bar {
+.top-bar {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
   gap: 1rem;
   padding: 1.1rem 0 0;
+  flex-wrap: wrap;
+}
+
+.summit-link {
+  color: var(--accent);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: opacity 160ms ease;
+}
+
+.summit-link:hover {
+  opacity: 0.8;
+}
+
+.lang-bar {
+  display: flex;
+  gap: 1rem;
   font-size: 0.82rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -63,7 +85,7 @@ a {
 
 .hero {
   position: relative;
-  min-height: calc(100vh - 3rem);
+  min-height: calc(100vh - 3.5rem);
   display: grid;
   align-content: center;
   padding: 2.5rem 0 4rem;
@@ -72,34 +94,33 @@ a {
 
 .hero-visual {
   position: absolute;
-  inset: 8% -8% -20% 35%;
-  background:
-    linear-gradient(120deg, transparent 0%, rgba(47, 214, 168, 0.08) 40%, transparent 70%),
-    repeating-linear-gradient(
-      -18deg,
-      transparent 0 18px,
-      rgba(243, 246, 244, 0.035) 18px 19px
-    );
-  mask-image: radial-gradient(ellipse at 40% 40%, #000 20%, transparent 72%);
-  animation: drift 18s ease-in-out infinite alternate;
+  inset: 10% -5% -15% 40%;
   pointer-events: none;
+  background:
+    linear-gradient(135deg, transparent 35%, rgba(214, 255, 60, 0.1) 50%, transparent 65%);
+  mask-image: radial-gradient(ellipse at 30% 40%, #000 15%, transparent 70%);
+  animation: drift 16s ease-in-out infinite alternate;
 }
 
 .hero-visual::after {
   content: "";
   position: absolute;
-  inset: 18% 12% 22% 8%;
-  border: 1px solid rgba(47, 214, 168, 0.28);
-  transform: rotate(-8deg) skewX(-6deg);
-  animation: frameIn 1.1s ease both;
+  width: min(48vw, 420px);
+  height: min(48vw, 420px);
+  right: 8%;
+  top: 12%;
+  border: 2px solid var(--accent);
+  transform: rotate(45deg);
+  opacity: 0.55;
+  animation: frameIn 1s ease both;
 }
 
 .summit {
   position: relative;
-  margin: 0 0 1.4rem;
-  color: var(--accent-2);
+  margin: 0 0 1.2rem;
+  color: var(--accent);
   font-size: 0.78rem;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   animation: rise 700ms ease both;
 }
@@ -108,19 +129,20 @@ a {
   position: relative;
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(3.4rem, 11vw, 7.2rem);
+  font-size: clamp(3.2rem, 10vw, 6.8rem);
   font-weight: 700;
   line-height: 0.92;
   letter-spacing: -0.04em;
+  text-transform: uppercase;
   animation: rise 850ms ease both;
 }
 
 .tagline {
   position: relative;
   margin: 1.35rem 0 0;
-  max-width: 18ch;
+  max-width: 20ch;
   font-family: var(--font-display);
-  font-size: clamp(1.45rem, 3.4vw, 2.25rem);
+  font-size: clamp(1.35rem, 3.2vw, 2.1rem);
   font-weight: 500;
   line-height: 1.2;
   animation: rise 950ms ease both;
@@ -153,8 +175,10 @@ a {
   padding: 0.75rem 1.25rem;
   border: 1px solid transparent;
   font-family: var(--font-body);
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   transition:
     transform 160ms ease,
     background 160ms ease,
@@ -167,11 +191,11 @@ a {
 
 .btn-primary {
   background: var(--accent);
-  color: #041018;
+  color: #111;
 }
 
 .btn-primary:hover {
-  background: #57e4bc;
+  background: #e4ff70;
 }
 
 .btn-ghost {
@@ -181,7 +205,7 @@ a {
 }
 
 .btn-ghost:hover {
-  border-color: rgba(243, 246, 244, 0.35);
+  border-color: rgba(255, 255, 255, 0.35);
 }
 
 .section {
@@ -192,8 +216,9 @@ a {
 .section h2 {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(1.8rem, 4vw, 2.6rem);
-  letter-spacing: -0.03em;
+  font-size: clamp(1.7rem, 4vw, 2.5rem);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
 }
 
 .section .lead {
@@ -214,8 +239,8 @@ a {
 .flow-list li {
   position: relative;
   padding: 1rem 1rem 1rem 4rem;
-  border-left: 2px solid rgba(47, 214, 168, 0.45);
-  background: linear-gradient(90deg, rgba(47, 214, 168, 0.07), transparent 70%);
+  border-left: 2px solid var(--accent);
+  background: linear-gradient(90deg, rgba(214, 255, 60, 0.08), transparent 70%);
   animation: rise 700ms ease both;
 }
 
@@ -257,8 +282,8 @@ a {
 
 .proof-item span {
   color: var(--muted);
-  font-size: 0.8rem;
-  letter-spacing: 0.06em;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
@@ -304,6 +329,12 @@ a {
   border-top: 1px solid var(--line);
   color: var(--muted);
   font-size: 0.88rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.footer a {
+  color: var(--accent);
 }
 
 @keyframes rise {
@@ -320,11 +351,11 @@ a {
 @keyframes frameIn {
   from {
     opacity: 0;
-    transform: rotate(-14deg) skewX(-8deg) scale(0.96);
+    transform: rotate(30deg) scale(0.92);
   }
   to {
-    opacity: 1;
-    transform: rotate(-8deg) skewX(-6deg) scale(1);
+    opacity: 0.55;
+    transform: rotate(45deg) scale(1);
   }
 }
 

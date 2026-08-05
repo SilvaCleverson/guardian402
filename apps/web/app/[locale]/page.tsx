@@ -7,6 +7,7 @@ import { isLocale, locales, type Locale } from "../../lib/i18n";
 const CONTRACT_ID = "CARQCD7G3S7WNWA37NZS2DW4CCP2V3J4U4T4NG3FXVEW4XNALM65NHAO";
 const GITHUB_URL = "https://github.com/SilvaCleverson/guardian402";
 const CONTRACT_URL = `https://lab.stellar.org/r/testnet/contract/${CONTRACT_ID}`;
+const SUMMIT_URL = "https://stellar-summit-lp.vercel.app/";
 
 type PageProps = {
   params: Promise<{ locale: string }>;
@@ -43,7 +44,7 @@ export default async function LocalePage({ params }: PageProps) {
 
   return (
     <main className="site">
-      <LanguageSwitcher locale={locale} />
+      <LanguageSwitcher locale={locale} summitLabel={t.summitOfficial} />
 
       <section className="hero" aria-label={t.brand}>
         <div className="hero-visual" aria-hidden="true" />
@@ -51,12 +52,18 @@ export default async function LocalePage({ params }: PageProps) {
         <h1 className="brand">{t.brand}</h1>
         <p className="tagline">{t.tagline}</p>
         <p className="support">{t.heroSupport}</p>
+        <p className="support" style={{ marginTop: "0.75rem", fontSize: "0.92rem" }}>
+          {t.laneNote}
+        </p>
         <div className="cta-row">
           <a className="btn btn-primary" href={GITHUB_URL} target="_blank" rel="noreferrer">
             {t.ctaGithub}
           </a>
           <a className="btn btn-ghost" href={CONTRACT_URL} target="_blank" rel="noreferrer">
             {t.ctaContract}
+          </a>
+          <a className="btn btn-ghost" href={SUMMIT_URL} target="_blank" rel="noreferrer">
+            {t.ctaSummit} ?
           </a>
         </div>
       </section>
@@ -116,6 +123,11 @@ export default async function LocalePage({ params }: PageProps) {
 
       <footer className="footer">
         <p>{t.footerBuilt}</p>
+        <p>
+          <a href={SUMMIT_URL} target="_blank" rel="noreferrer">
+            {t.summitOfficial} ?
+          </a>
+        </p>
       </footer>
     </main>
   );
