@@ -7,39 +7,35 @@
 
 > Is the boleto in Protheus the real one?
 
+**Everyone else asks you to trust the boleto sitting in your inbox. Guardian402 makes an agent pay to find out.**
+
 [Português](README.pt-BR.md) · [Español](README.es.md)
 
-**Guardian402** is a pay-per-use API that verifies whether boleto data — the kind positioned in **TOTVS Protheus** or sent by an agent — matches a **Soroban** integrity proof. Each call is charged in **USDC** on the **Stellar Testnet** via **x402**. No account, no API key, no subscription.
+**Guardian402** is a pay-per-use API that verifies whether boleto data — the kind issued in **TOTVS Protheus** or sent by an agent — matches a **Soroban** integrity proof. Each call is charged in **USDC** on the **Stellar Testnet** via **x402**. No account, no API key, no subscription.
 
-**Presentation site:** https://guardian402-summit.vercel.app  
-**Summit:** [Stellar Summit SP 2026](https://stellar-summit-lp.vercel.app/) — Payments and Agent Tooling / SDF DevEx / Agentic Payments (x402)
+**Presentation site:** https://guardian402-summit.vercel.app
+**Summit:** [Stellar Summit SP 2026](https://stellar-summit-lp.vercel.app/) — Agentic Payments (x402 / MPP)
 
 All code in this repository is original work produced for the challenge. Related reference: [Boleto Guardian](https://guardian-labs.xyz/boleto-guardian.html).
 
-## What is TOTVS?
+---
 
-**TOTVS** is Brazil's largest business-software company. Its flagship ERP, **Protheus**, is widely used by Brazilian companies to issue and manage *boletos* (bank payment slips).
+## The problem
 
-According to the latest **FGV-Eaesp** Annual IT Use Survey:
+TOTVS Protheus is Brazil's most widely deployed ERP for issuing and managing boletos — about **34%** of the overall ERP market (tied with SAP) and about **50%** among smaller deployments, per the FGV-Eaesp Annual IT Use Survey. Every one of those boletos can be altered after it leaves the ERP: barcode, amount, due date, or beneficiary document tampered with before whoever pays it ever sees the original.
 
-- about **34%** of Brazil's overall ERP market (tied with SAP)
-- about **50%** among smaller deployments (up to ~180 users)
+| Gap | What it looks like |
+| --- | --- |
+| No independent check | A boleto is trusted because it "looks right" — nothing compares it cryptographically against the original record. |
+| Closed integrations | Existing verification services require signup, API keys, and monthly contracts — a poor fit for an autonomous agent that wants to pay per call. |
+| Agents can't act alone | An AI agent that needs to confirm a boleto today has no way to pay for that confirmation without a human provisioning credentials first. |
+| All-or-nothing trust | Once a boleto is forwarded, nothing distinguishes an authentic one from a tampered one until money has already moved. |
 
-So verifying a Protheus boleto addresses a large share of Brazilian corporate payment flows.
+Guardian402 exposes a single endpoint gated by **x402**: the HTTP response itself states how much the verification costs, on which network, in which asset, and to which address. The agent signs the payment, retries the call, and gets a hash-verified answer back — no account required.
 
-## Why Guardian402
+---
 
-Companies and AI agents that need to confirm boleto data today depend on closed integrations, commercial contracts, API keys, and monthly billing — a poor fit for autonomous agents that want to pay per call.
-
-Guardian402 exposes a single endpoint protected by **x402**. There is no signup and no API key: the HTTP response itself tells the caller how much the verification costs, on which network to pay, in which asset, and to which address. The agent signs the payment, retries the call, and receives the result.
-
-**Product path**
-
-1. Context: a boleto sitting in TOTVS Protheus needs an independent integrity check.
-2. MVP (this repo): hash verification against Soroban, paid with x402 USDC.
-3. Roadmap: native Protheus consumption of the same endpoint.
-
-## How It Works
+## How it works
 
 ```mermaid
 sequenceDiagram
@@ -60,65 +56,21 @@ sequenceDiagram
     API-->>Agent: 200 OK + verification result
 ```
 
-1. `POST /v1/verify` without payment -> `HTTP 402 Payment Required`.
+1. `POST /v1/verify` without payment → `HTTP 402 Payment Required`.
 2. The client signs an x402 payment authorization in USDC.
 3. The facilitator settles the payment on the Stellar Testnet.
 4. The API queries the Soroban `verification-registry` contract.
 5. The API returns `AUTHENTIC | MISMATCH | NOT_FOUND | REVOKED`.
 
-## Live Deployment (Testnet)
+Only a hash of the canonicalized boleto data is stored on-chain — never the boleto itself, CPF/CNPJ, or bank data. **Paying does not make a boleto authentic**: Guardian402 verifies that the supplied data matches a previously registered integrity proof; it does not confirm bank settlement or payment status.
 
-| Item | Value |
-| --- | --- |
-| Presentation | [guardian402-summit.vercel.app](https://guardian402-summit.vercel.app) |
-| Contract ID | `CARQCD7G3S7WNWA37NZS2DW4CCP2V3J4U4T4NG3FXVEW4XNALM65NHAO` |
-| Explorer | [lab.stellar.org](https://lab.stellar.org/r/testnet/contract/CARQCD7G3S7WNWA37NZS2DW4CCP2V3J4U4T4NG3FXVEW4XNALM65NHAO) |
-| Network | `stellar:testnet` |
-| Price | `$0.01` USDC per verification |
-| Facilitator | [www.x402.org/facilitator](https://www.x402.org/facilitator) |
+---
 
-## Tech Stack
-
-| Layer | Technology |
-| --- | --- |
-| Language | TypeScript |
-| Runtime | Node.js >= 20 |
-| API | Express + Zod |
-| Smart contract | Soroban (Rust) |
-| Payment | x402 `exact` / USDC Testnet |
-| Web | Next.js (EN / PT / ES) |
-| Testing | Vitest |
-| Monorepo | npm workspaces |
-
-## Project Structure
-
-```text
-guardian402/
-??? apps/
-?   ??? api/          Express API protected by x402
-?   ??? cli/          Agent client that pays and verifies
-?   ??? web/          Presentation site (Vercel)
-??? packages/
-?   ??? shared/       Canonicalization + hashing
-?   ??? contract-client/
-??? contracts/
-?   ??? verification-registry/
-??? scripts/
-??? docs/
-??? GUARDIAN402_CHALLENGE.md
-```
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js >= 20
-- [Stellar CLI](https://developers.stellar.org/docs/tools/developer-tools)
-- Funded Testnet wallet (XLM + USDC trustline) for the demo client
-
-### Installation
+## Quickstart
 
 ```bash
+git clone https://github.com/SilvaCleverson/guardian402.git
+cd guardian402
 npm install
 cp .env.example .env
 # fill in X402_PAY_TO, STELLAR_PRIVATE_KEY, VERIFICATION_CONTRACT_ID
@@ -126,44 +78,15 @@ npm run build
 npm run start:api
 ```
 
-### Key environment variables
+Prerequisites: Node.js >= 20, the [Stellar CLI](https://developers.stellar.org/docs/tools/developer-tools), and a funded Testnet wallet (XLM + USDC trustline) for the demo client.
 
-| Variable | Description |
-| --- | --- |
-| `STELLAR_NETWORK` | e.g. `stellar:testnet` |
-| `STELLAR_RPC_URL` | Soroban RPC endpoint |
-| `VERIFICATION_CONTRACT_ID` | Deployed contract ID |
-| `X402_PRICE` | e.g. `$0.01` |
-| `X402_PAY_TO` | Wallet that receives payment |
-| `X402_FACILITATOR_URL` | x402 facilitator |
-| `STELLAR_PRIVATE_KEY` | Demo client key � **never commit** |
-
-## CLI Usage
+Pay and verify from the CLI:
 
 ```bash
 npm run guardian -- verify --boleto-id "23793381286000000000123456789012345678901234" --amount "159.90" --due-date "2026-08-10" --beneficiary-document "12345678000199"
 ```
 
 On PowerShell, keep the command on **one line** (or use backtick `` ` `` for line breaks, not `\`).
-
-## API Reference
-
-| Method | Path | Payment | Description |
-| --- | --- | --- | --- |
-| `GET` | `/health` | No | Liveness |
-| `GET` | `/v1/info` | No | Service metadata |
-| `POST` | `/v1/verify` | Yes (x402) | Verify boleto integrity |
-
-## Verification Statuses
-
-| Status | Meaning |
-| --- | --- |
-| `AUTHENTIC` | Active record and matching hash |
-| `MISMATCH` | Record exists, data diverges |
-| `NOT_FOUND` | No record for that identifier |
-| `REVOKED` | Record revoked by admin |
-
-## Scripts
 
 | Command | Description |
 | --- | --- |
@@ -174,23 +97,122 @@ On PowerShell, keep the command on **one line** (or use backtick `` ` `` for lin
 | `npm run seed:demo` | Seed demo records |
 | `npm test` | Tests |
 
-## Documentation
+---
+
+## Payment path (testnet)
+
+| Item | Value |
+| --- | --- |
+| Contract ID | `CARQCD7G3S7WNWA37NZS2DW4CCP2V3J4U4T4NG3FXVEW4XNALM65NHAO` |
+| Explorer | [lab.stellar.org](https://lab.stellar.org/r/testnet/contract/CARQCD7G3S7WNWA37NZS2DW4CCP2V3J4U4T4NG3FXVEW4XNALM65NHAO) |
+| Network | `stellar:testnet` |
+| Scheme | x402 `exact` |
+| Price | `$0.01` USDC per verification |
+| Facilitator | [www.x402.org/facilitator](https://www.x402.org/facilitator) |
+
+Key environment variables:
+
+| Variable | Description |
+| --- | --- |
+| `STELLAR_NETWORK` | e.g. `stellar:testnet` |
+| `STELLAR_RPC_URL` | Soroban RPC endpoint |
+| `VERIFICATION_CONTRACT_ID` | Deployed contract ID |
+| `X402_PRICE` | e.g. `$0.01` |
+| `X402_PAY_TO` | Wallet that receives payment |
+| `X402_FACILITATOR_URL` | x402 facilitator |
+| `STELLAR_PRIVATE_KEY` | Demo client key — **never commit** |
+
+---
+
+## API reference
+
+| Method | Path | Payment | Description |
+| --- | --- | --- | --- |
+| `GET` | `/health` | No | Liveness |
+| `GET` | `/v1/info` | No | Service metadata |
+| `POST` | `/v1/verify` | Yes (x402) | Verify boleto integrity |
+
+| Status | Meaning |
+| --- | --- |
+| `AUTHENTIC` | Active record and matching hash |
+| `MISMATCH` | Record exists, data diverges |
+| `NOT_FOUND` | No record for that identifier |
+| `REVOKED` | Record revoked by admin |
+
+---
+
+## Status
+
+Hackathon build for Stellar Builder Summit SP 2026, Agentic Payments (x402 / MPP) sub-lane. What is verified, and what is not:
+
+| Area | State |
+| --- | --- |
+| Soroban contract (`contracts/verification-registry`) | `initialize` / `register` / `verify` / `revoke` + events. 7 unit tests passing. Deployed to Testnet. |
+| API (`apps/api`) | x402-gated `POST /v1/verify`, Zod validation, canonicalization. 3 tests passing. |
+| Shared canonicalization (`packages/shared`) | Deterministic hashing / normalization. 4 tests passing. |
+| Contract client (`packages/contract-client`) | TypeScript adapter with `simulate`, status mapping, timeout handling. |
+| CLI agent (`apps/cli`) | Pays via x402 and verifies all 4 statuses end to end. |
+| Web (`apps/web`) | Next.js presentation site (EN / PT / ES), deployed on Vercel. |
+| Repository | Public: <https://github.com/SilvaCleverson/guardian402>. No secrets found in tracked files or git history. |
+| Demo video | Not recorded — optional per the bounty rules, does not block submission. |
+
+### Verified end-to-end cases
+
+| Case | Result | Evidence |
+| --- | --- | --- |
+| AUTHENTIC | ok | settled via x402 payment |
+| MISMATCH | ok | tx `8e1965fa...` |
+| NOT_FOUND | ok | tx `e5312cc6...` |
+| REVOKED | ok | tx `daf44a55...` |
+
+Facilitator used: `https://www.x402.org/facilitator` (official Stellar quickstart).
+
+### Stack
+
+TypeScript, Node.js >= 20, Express + Zod, Soroban (Rust), x402 `exact` / USDC Testnet, Next.js (EN/PT/ES), Vitest, npm workspaces.
+
+---
+
+## Known issues
+
+- Fixed price (`$0.01` per call) — no dynamic pricing yet.
+- Testnet only — nothing here has been exercised against Stellar mainnet.
+- Native Protheus consumption of the endpoint is roadmap, not implemented in this repo.
+
+---
+
+## Non-goals
+
+Each of these was considered and deliberately left out of this MVP.
+
+| | Not doing | Because |
+| --- | --- | --- |
+| NG1 | Mainnet deployment | Hackathon scope is Testnet only. |
+| NG2 | Native Protheus plugin/module | Roadmap item — this repo ships the endpoint the plugin would call. |
+| NG3 | Multi-ERP support | MVP targets Protheus specifically, the largest single ERP by boleto volume in Brazil. |
+| NG4 | KYC/AML or identity checks | Out of scope — Guardian402 checks data integrity, not who is paying. |
+| NG5 | Bank settlement confirmation | A match against the registered hash is not proof the boleto was ever paid or settled. |
+
+---
+
+## Repository
+
+| Path | Contents |
+| --- | --- |
+| `apps/api/` | Express API protected by x402 |
+| `apps/cli/` | Agent client that pays and verifies |
+| `apps/web/` | Presentation site (Vercel) |
+| `packages/shared/` | Canonicalization + hashing |
+| `packages/contract-client/` | Soroban contract adapter |
+| `contracts/verification-registry/` | Soroban smart contract |
+| `scripts/` | Wallet creation, contract deploy, demo seed |
+| `docs/` | Architecture, demo script, security notes, status, submission |
 
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
 - [`docs/DEMO.md`](docs/DEMO.md)
 - [`docs/SECURITY.md`](docs/SECURITY.md)
 - [`docs/STATUS.md`](docs/STATUS.md)
 - [`docs/SUBMISSION.md`](docs/SUBMISSION.md)
-- [Boleto Guardian](https://guardian-labs.xyz/boleto-guardian.html) (related reference)
+- Related reference: [Boleto Guardian](https://guardian-labs.xyz/boleto-guardian.html)
 
-## Security & Disclaimer
-
-- Only hashes are stored on-chain � never the full boleto, CPF/CNPJ, or bank data.
-- `.env` and private keys are never committed.
-- **Paying does not make a boleto authentic.**
-
-> Guardian402 verifies whether supplied boleto data matches a previously registered integrity proof. It does not confirm bank settlement or payment status.
-
-## License
-
-[MIT](LICENSE)
+<https://github.com/SilvaCleverson/guardian402> · [MIT](LICENSE)
