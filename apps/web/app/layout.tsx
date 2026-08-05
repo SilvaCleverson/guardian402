@@ -1,29 +1,23 @@
-import type { CSSProperties, ReactNode } from "react";
+import type { ReactNode } from "react";
 import { Space_Grotesk, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 
 const grotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-grotesk-loaded",
-  weight: ["300", "400", "500", "700"],
+  variable: "--font-display",
+  weight: ["400", "500", "700"],
 });
 
 const mono = IBM_Plex_Mono({
   subsets: ["latin"],
-  variable: "--font-mono-loaded",
+  variable: "--font-mono",
   weight: ["400", "500"],
 });
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-  const fontVars = {
-    ["--font-display"]: "var(--font-grotesk-loaded), sans-serif",
-    ["--font-body"]: "var(--font-grotesk-loaded), sans-serif",
-    ["--font-mono"]: "var(--font-mono-loaded), monospace",
-  } as CSSProperties;
-
   return (
     <html lang="en" className={`${grotesk.variable} ${mono.variable}`}>
-      <body style={fontVars}>{children}</body>
+      <body>{children}</body>
     </html>
   );
 }

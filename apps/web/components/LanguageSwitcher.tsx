@@ -7,19 +7,19 @@ const labels: Record<Locale, string> = {
   es: "ES",
 };
 
-const SUMMIT_URL = "https://stellar-summit-lp.vercel.app/";
+const GITHUB_URL = "https://github.com/SilvaCleverson/guardian402";
 
 export function LanguageSwitcher({
   locale,
-  summitLabel,
+  repoLabel,
 }: {
   locale: Locale;
-  summitLabel: string;
+  repoLabel: string;
 }) {
   return (
     <div className="top-bar">
-      <a className="summit-link" href={SUMMIT_URL} target="_blank" rel="noreferrer">
-        {summitLabel} ?
+      <a className="demo-link" href={GITHUB_URL} target="_blank" rel="noreferrer">
+        {repoLabel}
       </a>
       <nav className="lang-bar" aria-label="Language">
         {locales.map((item) => (
