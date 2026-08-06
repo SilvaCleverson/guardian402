@@ -61,7 +61,7 @@ const en: Dictionary = {
     "MVP: hash-based verification against a Soroban registry, protected by x402 exact payments in USDC on Stellar Testnet.",
     "Roadmap: native Protheus consumption of the same endpoint - agents and ERPs pay only for the checks they run.",
   ],
-  totvsTitle: "Why TOTVS Protheus is the reference market",
+  totvsTitle: "ERP-agnostic by design — TOTVS Protheus is the reference market",
   totvsSupport:
     "TOTVS is Brazil's largest business-software company. Its flagship ERP, Protheus, is widely used by Brazilian firms to issue and manage boletos (bank payment slips). In the latest FGV-Eaesp IT survey, TOTVS holds about 34% of Brazil's overall ERP market (tied with SAP) and about 50% among smaller deployments (up to ~180 users) - which makes it the natural reference case for demos in Brazil. Guardian402 itself does not require Protheus: the same hash-based check works for boleto data from any ERP, billing system, or agent that sends the expected fields.",
   totvsSource: "Source: FGV-Eaesp Annual IT Use Survey (Brazil ERP market share).",
@@ -117,7 +117,7 @@ const pt: Dictionary = {
     "MVP: verificacao por hash contra um registry Soroban, protegida por pagamentos x402 exact em USDC na Stellar Testnet.",
     "Roadmap: consumo nativo no Protheus do mesmo endpoint - agentes e ERPs pagam so pelas verificacoes que executam.",
   ],
-  totvsTitle: "Por que o TOTVS Protheus e o mercado de referencia",
+  totvsTitle: "Agnostico de ERP por design - TOTVS Protheus e o mercado de referencia",
   totvsSupport:
     "A TOTVS e a maior empresa brasileira de software de gestao. Seu ERP principal, o Protheus, e amplamente usado por empresas no Brasil para emitir e gerir boletos. Na pesquisa FGV-Eaesp mais recente, a TOTVS tem cerca de 34% do mercado geral de ERP no Brasil (empatada com a SAP) e cerca de 50% nas instalacoes menores (ate ~180 usuarios) - o que faz dela o caso de referencia natural para as demos no Brasil. O Guardian402 em si nao exige o Protheus: a mesma checagem por hash funciona para dados de boleto de qualquer ERP, sistema de faturamento ou agente que envie os campos esperados.",
   totvsSource: "Fonte: Pesquisa Anual de Uso de TI da FGV-Eaesp (market share de ERP no Brasil).",
@@ -173,7 +173,7 @@ const es: Dictionary = {
     "MVP: verificacion por hash contra un registry Soroban, protegida por pagos x402 exact en USDC en Stellar Testnet.",
     "Roadmap: consumo nativo en Protheus del mismo endpoint - agentes y ERPs pagan solo por las verificaciones que ejecutan.",
   ],
-  totvsTitle: "Por que TOTVS Protheus es el mercado de referencia",
+  totvsTitle: "Agnostico de ERP por diseno - TOTVS Protheus es el mercado de referencia",
   totvsSupport:
     "TOTVS es la mayor empresa brasilena de software de gestion. Su ERP principal, Protheus, se usa ampliamente en Brasil para emitir y administrar boletos. En la encuesta FGV-Eaesp mas reciente, TOTVS tiene cerca del 34% del mercado general de ERP en Brasil (empatada con SAP) y cerca del 50% en instalaciones mas pequenas (hasta ~180 usuarios) - lo que la convierte en el caso de referencia natural para las demos en Brasil. Guardian402 en si no requiere Protheus: la misma comprobacion por hash funciona para datos de boleto de cualquier ERP, sistema de facturacion o agente que envie los campos esperados.",
   totvsSource: "Fuente: Encuesta Anual de Uso de TI de FGV-Eaesp (market share de ERP en Brasil).",
