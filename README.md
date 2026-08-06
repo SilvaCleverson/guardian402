@@ -13,7 +13,7 @@
 
 **Guardian402** is a pay-per-use API that verifies whether boleto data — the kind issued in **TOTVS Protheus** or sent by an agent — matches a **Soroban** integrity proof. Each call is charged in **USDC** on the **Stellar Testnet** via **x402**. No account, no API key, no subscription.
 
-**Presentation site:** https://guardian402-summit.vercel.app
+**Presentation site:** https://guardian402-summit.vercel.app/en
 **Summit:** [Stellar Summit SP 2026](https://stellar-summit-lp.vercel.app/) — Agentic Payments (x402 / MPP)
 
 All code in this repository is original work produced for the challenge. Related reference: [Boleto Guardian](https://guardian-labs.xyz/boleto-guardian.html).
@@ -131,6 +131,11 @@ Key environment variables:
 | `GET` | `/health` | No | Liveness |
 | `GET` | `/v1/info` | No | Service metadata |
 | `POST` | `/v1/verify` | Yes (x402) | Verify boleto integrity |
+
+Interactive API docs (generated from `apps/api/src/docs/openapi.ts`):
+
+- Live static preview: [Swagger](https://guardian402-summit.vercel.app/docs) · [ReDoc](https://guardian402-summit.vercel.app/redoc) — hosted on the presentation site; "Try it out" cannot call a live backend from there.
+- Fully interactive, against the real Testnet contract, while the API runs locally (`npm run start:api`, default `http://localhost:3001`): `http://localhost:3001/docs`, `http://localhost:3001/redoc`, `http://localhost:3001/openapi.json`.
 
 | Status | Meaning |
 | --- | --- |

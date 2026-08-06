@@ -7,6 +7,8 @@ export function middleware(request: NextRequest) {
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||
+    pathname === "/docs" ||
+    pathname === "/redoc" ||
     pathname.includes(".")
   ) {
     return NextResponse.next();

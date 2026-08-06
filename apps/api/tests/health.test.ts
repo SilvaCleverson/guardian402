@@ -35,4 +35,26 @@ describe("API routes", () => {
     const response = await request(app).post("/v1/verify").send({ boletoId: "1" });
     expect(response.status).toBe(400);
   });
+
+  it("GET /openapi.json serves a valid OpenAPI document", async () => {
+    const app = createApp(config);
+    const response = await request(app).get("/openapi.json");
+    expect(response.status).toBe(200);
+    expect(response.body.openapi).toBe("3.0.3");
+    expect(response.body.paths["/v1/verify"]).toBeDefined();
+  });
+
+  it("GET /docs serves Swagger UI", async () => {
+    const app = createApp(config);
+    const response = await request(app).get("/docs/");
+    expect(response.status).toBe(200);
+    expect(response.text).toContain("swagger-ui");
+  });
+
+  it("GET /redoc serves the ReDoc page", async () => {
+    const app = createApp(config);
+    const response = await request(app).get("/redoc");
+    expect(response.status).toBe(200);
+    expect(response.text).toContain("<redoc");
+  });
 });

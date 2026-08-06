@@ -10,6 +10,8 @@ const CONTRACT_URL = `https://lab.stellar.org/r/testnet/contract/${CONTRACT_ID}`
 const SUMMIT_URL = "https://stellar-summit-lp.vercel.app/";
 const GUARDIAN_LABS = "https://guardian-labs.xyz/";
 const REFERENCE_URL = "https://guardian-labs.xyz/boleto-guardian.html";
+const API_DOCS_URL = "/docs";
+const API_REDOC_URL = "/redoc";
 
 type PageProps = {
   params: Promise<{ locale: string }>;
@@ -64,6 +66,9 @@ export default async function LocalePage({ params }: PageProps) {
             </a>
             <a className="btn btn-ghost" href={GUARDIAN_LABS} target="_blank" rel="noreferrer">
               {t.ctaGuardian}
+            </a>
+            <a className="btn btn-ghost" href={API_DOCS_URL} target="_blank" rel="noreferrer">
+              {t.ctaApiDocs}
             </a>
           </div>
         </section>
@@ -149,6 +154,16 @@ export default async function LocalePage({ params }: PageProps) {
             {" | "}
             <a href={REFERENCE_URL} target="_blank" rel="noreferrer">
               {t.ctaReference}
+            </a>
+            {" | "}
+            {t.ctaApiDocs}
+            {": "}
+            <a href={API_DOCS_URL} target="_blank" rel="noreferrer">
+              Swagger
+            </a>
+            {" / "}
+            <a href={API_REDOC_URL} target="_blank" rel="noreferrer">
+              ReDoc
             </a>
           </p>
         </footer>

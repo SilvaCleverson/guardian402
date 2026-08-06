@@ -1,0 +1,210 @@
+import type { ApiConfig } from "../config/env.js";
+
+const errorResponse = {
+  type: "object",
+  properties: {
+    error: { type: "string" },
+    message: { type: "string" },
+    details: { type: "object" },
+  },
+  required: ["error"],
+};
+
+const paymentRequiredResponse = {
+  description:
+    "Payment required. The response follows the x402 protocol: the body and the `PAYMENT-REQUIRED` header describe the price, network, asset and recipient address needed to authorize payment before retrying the request.",
+  content: {
+    "application/json": {
+      schema: {
+        type: "object",
+        description: "x402 payment challenge (shape defined by the official @x402/express middleware).",
+        additionalProperties: true,
+      },
+    },
+  },
+};
+
+export function buildOpenApiSpec(config: ApiConfig) {
+  return {
+    openapi: "3.0.3",
+    info: {
+      title: "Guardian402 API",
+      version: "0.1.0",
+      description:
+        "Pay-per-use boleto integrity verification API. `POST /v1/verify` is protected by the x402 payment protocol: an unpaid call returns HTTP 402 with payment instructions; the client authorizes a USDC payment on Stellar and repeats the call to receive the verification result backed by a Soroban contract.",
+      contact: {
+        name: "Guardian402",
+        url: "https://github.com/SilvaCleverson/guardian402",
+      },
+    },
+    servers: [{ url: `http://localhost:${config.PORT}`, description: "Local" }],
+    tags: [
+      { name: "Status", description: "Service health and metadata" },
+      { name: "Verification", description: "x402-protected boleto integrity verification" },
+    ],
+    paths: {
+      "/health": {
+        get: {
+          tags: ["Status"],
+          summary: "Health check",
+          responses: {
+            "200": {
+              description: "Service is healthy.",
+              content: {
+                "application/json": { schema: { $ref: "#/components/schemas/HealthResponse" } },
+              },
+            },
+          },
+        },
+      },
+      "/v1/info": {
+        get: {
+          tags: ["Status"],
+          summary: "Service metadata",
+          description: "Returns price, asset, network and the deployed contract ID.",
+          responses: {
+            "200": {
+              description: "Service metadata.",
+              content: {
+                "application/json": { schema: { $ref: "#/components/schemas/ServiceInfoResponse" } },
+              },
+            },
+          },
+        },
+      },
+      "/v1/ping": {
+        get: {
+          tags: ["Verification"],
+          summary: "x402-protected ping",
+          description: "Minimal endpoint used to prove the x402 payment flow in isolation.",
+          responses: {
+            "200": {
+              description: "Payment settled.",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      ok: { type: "boolean", example: true },
+                      service: { type: "string", example: "guardian402" },
+                      message: { type: "string", example: "x402 payment settled" },
+                    },
+                  },
+                },
+              },
+            },
+            "402": paymentRequiredResponse,
+          },
+        },
+      },
+      "/v1/verify": {
+        post: {
+          tags: ["Verification"],
+          summary: "Verify boleto integrity (paid)",
+          description:
+            "Requires a settled x402 payment in USDC on Stellar. Compares the supplied boleto data against the integrity proof registered in the Soroban verification-registry contract.",
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": { schema: { $ref: "#/components/schemas/VerifyRequest" } },
+            },
+          },
+          responses: {
+            "200": {
+              description:
+                "Verification executed. `status` may be AUTHENTIC, MISMATCH, NOT_FOUND or REVOKED — all are valid outcomes, not errors.",
+              content: {
+                "application/json": { schema: { $ref: "#/components/schemas/VerifyResponse" } },
+              },
+            },
+            "400": {
+              description: "Invalid request body.",
+              content: {
+                "application/json": { schema: { $ref: "#/components/schemas/ErrorResponse" } },
+              },
+            },
+            "402": paymentRequiredResponse,
+            "503": {
+              description: "Contract not configured or Stellar RPC unavailable.",
+              content: {
+                "application/json": { schema: { $ref: "#/components/schemas/ErrorResponse" } },
+              },
+            },
+          },
+        },
+      },
+    },
+    components: {
+      schemas: {
+        HealthResponse: {
+          type: "object",
+          properties: {
+            status: { type: "string", example: "ok" },
+            service: { type: "string", example: "guardian402" },
+            network: { type: "string", example: "stellar:testnet" },
+          },
+          required: ["status", "service", "network"],
+        },
+        ServiceInfoResponse: {
+          type: "object",
+          properties: {
+            name: { type: "string", example: "Guardian402" },
+            description: { type: "string" },
+            price: { type: "string", example: "$0.01" },
+            asset: { type: "string", example: "USDC" },
+            network: { type: "string", example: "stellar:testnet" },
+            contractId: { type: "string" },
+          },
+          required: ["name", "description", "price", "asset", "network", "contractId"],
+        },
+        VerifyRequest: {
+          type: "object",
+          properties: {
+            boletoId: {
+              type: "string",
+              minLength: 1,
+              maxLength: 128,
+              example: "23793381286000000000123456789012345678901234",
+            },
+            amount: { type: "string", minLength: 1, maxLength: 32, example: "159.90" },
+            dueDate: { type: "string", format: "date", example: "2026-08-10" },
+            beneficiaryDocument: { type: "string", minLength: 1, maxLength: 32, example: "12345678000199" },
+          },
+          required: ["boletoId", "amount", "dueDate", "beneficiaryDocument"],
+        },
+        VerifyResponse: {
+          type: "object",
+          properties: {
+            status: {
+              type: "string",
+              enum: ["AUTHENTIC", "MISMATCH", "NOT_FOUND", "REVOKED"],
+            },
+            message: { type: "string" },
+            proof: {
+              type: "object",
+              properties: {
+                recordKey: { type: "string" },
+                documentHash: { type: "string" },
+                contractId: { type: "string" },
+                network: { type: "string" },
+              },
+            },
+            payment: {
+              type: "object",
+              properties: {
+                protocol: { type: "string", example: "x402" },
+                asset: { type: "string", example: "USDC" },
+                amount: { type: "string", example: "0.01" },
+                transactionHash: { type: "string", nullable: true },
+              },
+            },
+            verifiedAt: { type: "string", format: "date-time" },
+          },
+        },
+        ErrorResponse: errorResponse,
+      },
+    },
+  };
+}
+
+export type OpenApiSpec = ReturnType<typeof buildOpenApiSpec>;

@@ -11,6 +11,7 @@ export type Dictionary = {
   ctaContract: string;
   ctaGuardian: string;
   ctaReference: string;
+  ctaApiDocs: string;
   summitNote: string;
   whyTitle: string;
   whySupport: string;
@@ -48,6 +49,7 @@ const en: Dictionary = {
   ctaContract: "View contract",
   ctaGuardian: "Guardian Labs",
   ctaReference: "Boleto Guardian",
+  ctaApiDocs: "API docs",
   summitNote: "Stellar Builder Summit SP 2026 / Agentic Payments (x402)",
   whyTitle: "From ERP boleto to on-chain proof",
   whySupport:
@@ -102,6 +104,7 @@ const pt: Dictionary = {
   ctaContract: "Ver contrato",
   ctaGuardian: "Guardian Labs",
   ctaReference: "Boleto Guardian",
+  ctaApiDocs: "Docs da API",
   summitNote: "Stellar Builder Summit SP 2026 / Agentic Payments (x402)",
   whyTitle: "Do boleto no ERP a prova on-chain",
   whySupport:
@@ -156,6 +159,7 @@ const es: Dictionary = {
   ctaContract: "Ver contrato",
   ctaGuardian: "Guardian Labs",
   ctaReference: "Boleto Guardian",
+  ctaApiDocs: "Docs de la API",
   summitNote: "Stellar Builder Summit SP 2026 / Agentic Payments (x402)",
   whyTitle: "Del boleto en el ERP a la prueba on-chain",
   whySupport:

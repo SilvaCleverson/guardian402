@@ -1,4 +1,5 @@
 import express from "express";
+import swaggerUi from "swagger-ui-express";
 import { paymentMiddlewareFromConfig } from "@x402/express";
 import { HTTPFacilitatorClient } from "@x402/core/server";
 import { ExactStellarScheme } from "@x402/stellar/exact/server";
@@ -8,6 +9,8 @@ import type { ApiConfig } from "./config/env.js";
 import { createHealthRouter } from "./routes/health.js";
 import { createInfoRouter } from "./routes/info.js";
 import { createVerifyRouter } from "./routes/verify.js";
+import { buildOpenApiSpec } from "./docs/openapi.js";
+import { buildRedocHtml } from "./docs/redocPage.js";
 
 type NetworkId = `${string}:${string}`;
 
@@ -17,6 +20,11 @@ export function createApp(config: ApiConfig) {
 
   app.use(createHealthRouter(config));
   app.use(createInfoRouter(config));
+
+  const openApiSpec = buildOpenApiSpec(config);
+  app.get("/openapi.json", (_req, res) => res.json(openApiSpec));
+  app.use("/docs", swaggerUi.serve, swaggerUi.setup(openApiSpec));
+  app.get("/redoc", (_req, res) => res.type("html").send(buildRedocHtml("/openapi.json")));
 
   const network = config.STELLAR_NETWORK as NetworkId;
   const payTo = config.X402_PAY_TO;
