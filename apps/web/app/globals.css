@@ -40,7 +40,7 @@ body {
 .top-bar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 1rem;
   padding: 1.1rem 0 0;
   flex-wrap: wrap;

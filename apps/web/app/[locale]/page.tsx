@@ -49,7 +49,7 @@ export default async function LocalePage({ params }: PageProps) {
   return (
     <div className="locale-shell">
       <main className="site">
-        <LanguageSwitcher locale={locale} repoLabel={t.ctaGithub} />
+        <LanguageSwitcher locale={locale} />
 
         <section className="hero" aria-label={t.brand}>
           <div className="hero-visual" aria-hidden="true" />
