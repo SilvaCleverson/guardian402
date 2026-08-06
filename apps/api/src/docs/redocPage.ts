@@ -9,7 +9,7 @@ export function buildRedocHtml(specUrl: string): string {
   </head>
   <body>
     <redoc spec-url="${specUrl}"></redoc>
-    <script src="https://cdn.redoc.ly/redoc/latest/bundle.js"></script>
+    <script src="https://unpkg.com/redoc@2.1.3/bundles/redoc.standalone.js"></script>
   </body>
 </html>`;
 }

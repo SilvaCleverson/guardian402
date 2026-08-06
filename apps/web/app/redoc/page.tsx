@@ -10,7 +10,7 @@ export default function RedocPage() {
     <>
       {/* @ts-expect-error -- <redoc> is a web component registered by the CDN bundle below */}
       <redoc spec-url="/openapi.json"></redoc>
-      <Script src="https://cdn.redoc.ly/redoc/latest/bundle.js" strategy="afterInteractive" />
+      <Script src="https://unpkg.com/redoc@2.1.3/bundles/redoc.standalone.js" strategy="afterInteractive" />
     </>
   );
 }

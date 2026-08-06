@@ -5,13 +5,13 @@
 ![Network](https://img.shields.io/badge/network-Stellar%20Testnet-7D00FF.svg)
 ![Protocol](https://img.shields.io/badge/protocol-x402-000000.svg)
 
-> ¿El boleto en Protheus es el verdadero?
+> ¿Ese boleto es realmente el verdadero?
 
 **Todos te piden que confíes en el boleto que llegó a tu bandeja de entrada. Guardian402 hace que un agente pague para averiguarlo.**
 
 [English](README.md) · [Português](README.pt-BR.md)
 
-**Guardian402** es una API de pago por uso que verifica si los datos de un boleto — como el posicionado en **TOTVS Protheus** o enviado por un agente — coinciden con una prueba de integridad en **Soroban**. Cada llamada se cobra en **USDC** en la **Stellar Testnet** vía **x402**. Sin cuenta, sin API key, sin suscripción.
+**Guardian402** es una API de pago por uso que verifica si los datos de un boleto — de cualquier ERP, sistema de facturación o agente, incluido **TOTVS Protheus** (el ERP más grande de Brasil) — coinciden con una prueba de integridad en **Soroban**. Cada llamada se cobra en **USDC** en la **Stellar Testnet** vía **x402**. Sin cuenta, sin API key, sin suscripción.
 
 **Sitio de presentación:** https://guardian402-summit.vercel.app
 **Summit:** [Stellar Summit SP 2026](https://stellar-summit-lp.vercel.app/) — Agentic Payments (x402 / MPP)
@@ -22,7 +22,7 @@ Todo el código de este repositorio es trabajo original producido para el desaf�
 
 ## El problema
 
-TOTVS Protheus es el ERP más utilizado en Brasil para emitir y administrar boletos — cerca del **34%** del mercado general de ERP (empatado con SAP) y cerca del **50%** en instalaciones más pequeñas, según la encuesta anual FGV-Eaesp de Uso de TI. Cualquiera de esos boletos puede alterarse después de salir del ERP: código de barras, monto, vencimiento o documento del beneficiario manipulados antes de llegar a quien lo va a pagar.
+Un boleto emitido por cualquier ERP o sistema de facturación puede alterarse después de salir del sistema de origen: código de barras, monto, vencimiento o documento del beneficiario manipulados antes de llegar a quien lo va a pagar. Guardian402 en sí es agnóstico respecto al origen del boleto — solo le importa si los datos recibidos coinciden con lo registrado on-chain. TOTVS Protheus es el caso ancla de este build: es el ERP más utilizado en Brasil para emitir y administrar boletos — cerca del **34%** del mercado general de ERP (empatado con SAP) y cerca del **50%** en instalaciones más pequeñas, según la encuesta anual FGV-Eaesp de Uso de TI —, lo que lo convierte en el mercado direccionable individual más grande de Brasil y el ERP que el equipo conoce mejor para validar la demo.
 
 | Brecha | Cómo se ve |
 | --- | --- |
@@ -189,7 +189,7 @@ Cada uno de estos fue considerado y deliberadamente dejado fuera de este MVP.
 | --- | --- | --- |
 | NG1 | Despliegue en mainnet | El alcance del hackathon es solo Testnet. |
 | NG2 | Plugin/módulo nativo en Protheus | Ítem de roadmap — este repo entrega el endpoint que el plugin invocaría. |
-| NG3 | Soporte multi-ERP | El MVP apunta específicamente a Protheus, el ERP individual con mayor volumen de boletos en Brasil. |
+| NG3 | Conectores nativos empaquetados para cada ERP | La API ya es agnóstica de ERP — cualquier sistema puede enviar el mismo payload JSON. Entregar plugins listos por ERP (incluido Protheus) es alcance futuro, no un requisito para que el servicio central funcione. |
 | NG4 | KYC/AML o verificación de identidad | Fuera de alcance — Guardian402 verifica la integridad de los datos, no quién está pagando. |
 | NG5 | Confirmación de liquidación bancaria | Un hash coincidente no es prueba de que el boleto haya sido pagado o liquidado. |
 

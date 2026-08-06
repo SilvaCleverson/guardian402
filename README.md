@@ -5,13 +5,13 @@
 ![Network](https://img.shields.io/badge/network-Stellar%20Testnet-7D00FF.svg)
 ![Protocol](https://img.shields.io/badge/protocol-x402-000000.svg)
 
-> Is the boleto in Protheus the real one?
+> Is that boleto the real one?
 
 **Everyone else asks you to trust the boleto sitting in your inbox. Guardian402 makes an agent pay to find out.**
 
 [Português](README.pt-BR.md) · [Español](README.es.md)
 
-**Guardian402** is a pay-per-use API that verifies whether boleto data — the kind issued in **TOTVS Protheus** or sent by an agent — matches a **Soroban** integrity proof. Each call is charged in **USDC** on the **Stellar Testnet** via **x402**. No account, no API key, no subscription.
+**Guardian402** is a pay-per-use API that verifies whether boleto data — from any ERP, billing system, or agent, TOTVS Protheus (Brazil's largest ERP) among them — matches a **Soroban** integrity proof. Each call is charged in **USDC** on the **Stellar Testnet** via **x402**. No account, no API key, no subscription.
 
 **Presentation site:** https://guardian402-summit.vercel.app/en
 **Summit:** [Stellar Summit SP 2026](https://stellar-summit-lp.vercel.app/) — Agentic Payments (x402 / MPP)
@@ -22,7 +22,7 @@ All code in this repository is original work produced for the challenge. Related
 
 ## The problem
 
-TOTVS Protheus is Brazil's most widely deployed ERP for issuing and managing boletos — about **34%** of the overall ERP market (tied with SAP) and about **50%** among smaller deployments, per the FGV-Eaesp Annual IT Use Survey. Every one of those boletos can be altered after it leaves the ERP: barcode, amount, due date, or beneficiary document tampered with before whoever pays it ever sees the original.
+A boleto issued by any ERP or billing system can be altered after it leaves the system of origin: barcode, amount, due date, or beneficiary document tampered with before whoever pays it ever sees the original. Guardian402 itself is agnostic to where the boleto came from — it only cares whether the data it receives matches what was registered on-chain. TOTVS Protheus is the anchor case for this build: it's Brazil's most widely deployed ERP for issuing and managing boletos — about **34%** of the overall ERP market (tied with SAP) and about **50%** among smaller deployments, per the FGV-Eaesp Annual IT Use Survey — making it the largest single addressable market in Brazil, and the ERP the team knows best for validating the demo.
 
 | Gap | What it looks like |
 | --- | --- |
@@ -194,7 +194,7 @@ Each of these was considered and deliberately left out of this MVP.
 | --- | --- | --- |
 | NG1 | Mainnet deployment | Hackathon scope is Testnet only. |
 | NG2 | Native Protheus plugin/module | Roadmap item — this repo ships the endpoint the plugin would call. |
-| NG3 | Multi-ERP support | MVP targets Protheus specifically, the largest single ERP by boleto volume in Brazil. |
+| NG3 | Packaged native connectors for every ERP | The API itself is already ERP-agnostic — any system can POST the same JSON payload. Shipping turnkey plugins per ERP (Protheus included) is future scope, not required for the core service to work. |
 | NG4 | KYC/AML or identity checks | Out of scope — Guardian402 checks data integrity, not who is paying. |
 | NG5 | Bank settlement confirmation | A match against the registered hash is not proof the boleto was ever paid or settled. |
 

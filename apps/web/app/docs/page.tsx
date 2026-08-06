@@ -29,15 +29,17 @@ export default function SwaggerDocsPage() {
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: `
-            window.addEventListener("load", function () {
+            (function poll() {
               if (window.SwaggerUIBundle) {
                 window.SwaggerUIBundle({
                   url: "/openapi.json",
                   dom_id: "#swagger-ui",
                   presets: [window.SwaggerUIBundle.presets.apis],
                 });
+              } else {
+                setTimeout(poll, 50);
               }
-            });
+            })();
           `,
         }}
       />
