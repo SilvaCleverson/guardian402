@@ -121,6 +121,7 @@ Key environment variables:
 | `X402_PAY_TO` | Wallet that receives payment |
 | `X402_FACILITATOR_URL` | x402 facilitator |
 | `STELLAR_PRIVATE_KEY` | Demo client key — **never commit** |
+| `GUARDIAN_SEAL_BASE_URL` | Optional. When set, `/v1/verify` looks up the boleto by barcode against the [Guardian Seal](https://github.com/guardianlabsw3-lang/guardian-seal) public verification API instead of the contract above — see [ERP integration](#erp-integration-guardian-seal) |
 
 ---
 
@@ -143,6 +144,25 @@ Interactive API docs (generated from `apps/api/src/docs/openapi.ts`):
 | `MISMATCH` | Record exists, data diverges |
 | `NOT_FOUND` | No record for that identifier |
 | `REVOKED` | Record revoked by admin |
+
+---
+
+## ERP integration: Guardian Seal
+
+`POST /v1/verify` can consult a real, independent boleto-sealing registry instead of Guardian402's own contract: [Guardian Seal](https://github.com/guardianlabsw3-lang/guardian-seal) (Guardian Labs), a separate platform where the issuer registers a signed, on-chain-anchored seal for a boleto at emission time.
+
+Set `GUARDIAN_SEAL_BASE_URL` (e.g. `https://seal-api-testnet.guardian-labs.xyz`) and Guardian402 queries `GET /api/public/verify/barcode/{boletoId}` on that service instead of its own Soroban contract. Guardian Seal's `seal_status` maps to Guardian402's vocabulary:
+
+| Guardian Seal `seal_status` | Guardian402 `status` |
+| --- | --- |
+| `VALID` | `AUTHENTIC` |
+| `REVOKED` | `REVOKED` |
+| `NOT_FOUND` (HTTP 404) | `NOT_FOUND` |
+| `PENDING` / `INVALID` / `NOT_ON_CHAIN` | `MISMATCH` |
+
+This was demonstrated live from a TOTVS Protheus (Contas a Receber) button: Protheus posts a plain JSON payload (no Stellar/x402 knowledge required) to a small local bridge acting as the paying agent, which settles the x402 payment and forwards to `/v1/verify`. Two real títulos were used — one sealed in Guardian Seal (`AUTHENTIC`), one not (`NOT_FOUND`) — see `docs/STATUS.md` for the transaction hashes.
+
+Without `GUARDIAN_SEAL_BASE_URL`, `/v1/verify` behaves exactly as before, against Guardian402's own contract — nothing about the original flow changes.
 
 ---
 

@@ -37,3 +37,6 @@ Thumbs.db
 .cache/
 .turbo/
 .vitest/
+
+# Personal recording notes — never ships in the repo
+VIDEO_SCRIPT.md

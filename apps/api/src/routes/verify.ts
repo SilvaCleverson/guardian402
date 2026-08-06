@@ -9,6 +9,7 @@ import type { VerificationRegistryClient } from "@guardian402/contract-client";
 import type { ApiConfig } from "../config/env.js";
 import { verifyRequestSchema } from "../schemas/verify.js";
 import { extractPaymentTransactionHash } from "../services/payment.js";
+import { verifyBoletoWithGuardianSeal } from "../services/guardianSeal.js";
 
 const messages: Record<VerificationStatus, string> = {
   AUTHENTIC: "The supplied boleto data matches the registered proof.",
@@ -33,6 +34,45 @@ export function createVerifyRouter(
       return;
     }
 
+    const paymentHash = extractPaymentTransactionHash(req);
+
+    if (config.GUARDIAN_SEAL_BASE_URL) {
+      try {
+        const seal = await verifyBoletoWithGuardianSeal(
+          config.GUARDIAN_SEAL_BASE_URL,
+          parsed.data.boletoId,
+        );
+
+        res.status(200).json({
+          status: seal.status,
+          message: messages[seal.status],
+          proof: {
+            recordKey: null,
+            documentHash: null,
+            contractId: seal.contractId ?? null,
+            network: seal.network ?? config.STELLAR_NETWORK,
+            sealTransactionHash: seal.txHash ?? null,
+            source: "guardian-seal",
+          },
+          payment: {
+            protocol: "x402",
+            asset: "USDC",
+            amount: config.X402_PRICE.replace("$", ""),
+            transactionHash: paymentHash ?? null,
+          },
+          verifiedAt: new Date().toISOString(),
+        });
+      } catch (error) {
+        const message = error instanceof Error ? error.message : "unknown_error";
+        console.error("guardian_seal_verify_failed", { message });
+        res.status(503).json({
+          error: "guardian_seal_unavailable",
+          message: "Unable to query the Guardian Seal verification API.",
+        });
+      }
+      return;
+    }
+
     if (!config.VERIFICATION_CONTRACT_ID) {
       res.status(503).json({
         error: "contract_unavailable",
@@ -45,7 +85,6 @@ export function createVerifyRouter(
       const recordKey = computeRecordKey(parsed.data.boletoId);
       const documentHash = computeDocumentHash(parsed.data);
       const status = await registry.verify(recordKey, documentHash);
-      const paymentHash = extractPaymentTransactionHash(req);
 
       res.status(200).json({
         status,

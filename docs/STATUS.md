@@ -40,9 +40,17 @@ Projeto iniciado durante o Stellar Builder Summit SP 2026. Encerramento: 2026-08
 
 - [x] README + ARCHITECTURE + DEMO + SECURITY + SUBMISSION
 
+### Fase 6.5 — Integração real com ERP (Protheus + Guardian Seal)
+
+- [x] `GUARDIAN_SEAL_BASE_URL` — `/v1/verify` passa a consultar a API pública do Guardian Seal
+      (`https://seal-api-testnet.guardian-labs.xyz`) por código de barras, em vez do contrato
+      Soroban próprio, quando configurada
+- [x] Botão no TOTVS Protheus (Contas a Receber) chamando uma ponte local que paga o x402 e
+      repassa o resultado — demonstrado com 2 títulos reais (um selado no Guardian Seal, outro não)
+
 ### Fase 7 — Submissão
 
-- [ ] Vídeo da demo (opcional no edital — não bloqueia a submissão)
+- [x] Vídeo da demo gravado
 - [x] Repositório público no GitHub (https://github.com/SilvaCleverson/guardian402)
 - [x] Conferir ausência de segredos no remoto
 
@@ -56,3 +64,10 @@ Projeto iniciado durante o Stellar Builder Summit SP 2026. Encerramento: 2026-08
 | REVOKED   | ok        | `daf44a55...` |
 
 Facilitator usado: `https://www.x402.org/facilitator` (quickstart oficial Stellar).
+
+## Evidências reais — Protheus + Guardian Seal (via /v1/verify com `GUARDIAN_SEAL_BASE_URL`)
+
+| Boleto (título real no Protheus) | Resultado | Tx x402 |
+| --- | --- | --- |
+| `00194253000003584014506335573904952998298608` (selado no Guardian Seal) | AUTHENTIC | `412d73bf...` |
+| `00194253000003584014506335573904952998298607` (não selado) | NOT_FOUND | `d2518107...` |

@@ -10,6 +10,7 @@ const envSchema = z.object({
   X402_PAY_TO: z.string().default(""),
   X402_FACILITATOR_URL: z.string().url().default("https://www.x402.org/facilitator"),
   X402_FACILITATOR_API_KEY: z.string().optional().default(""),
+  GUARDIAN_SEAL_BASE_URL: z.string().optional().default(""),
 });
 
 export type ApiConfig = z.infer<typeof envSchema>;
