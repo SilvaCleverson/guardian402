@@ -70,6 +70,9 @@ export default async function LocalePage({ params }: PageProps) {
             <a className="btn btn-ghost" href={API_DOCS_URL} target="_blank" rel="noreferrer">
               {t.ctaApiDocs}
             </a>
+            <a className="btn btn-ghost" href={API_REDOC_URL} target="_blank" rel="noreferrer">
+              {t.ctaRedoc}
+            </a>
           </div>
         </section>
 
@@ -154,16 +157,6 @@ export default async function LocalePage({ params }: PageProps) {
             {" | "}
             <a href={REFERENCE_URL} target="_blank" rel="noreferrer">
               {t.ctaReference}
-            </a>
-            {" | "}
-            {t.ctaApiDocs}
-            {": "}
-            <a href={API_DOCS_URL} target="_blank" rel="noreferrer">
-              Swagger
-            </a>
-            {" / "}
-            <a href={API_REDOC_URL} target="_blank" rel="noreferrer">
-              ReDoc
             </a>
           </p>
         </footer>
